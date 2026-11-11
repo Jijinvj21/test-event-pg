@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Peakst8 } from "@jijin_vj_25/sdk";
 
 const EVENT = {
@@ -15,87 +15,21 @@ const EVENT = {
   club: "Peakst8",
 };
 
-type LogEntry = { time: string; type: string; detail: string };
-
 export default function App() {
-  const sdk = useRef<Peakst8 | null>(null);
-  const barRef = useRef<HTMLDivElement>(null);
-  const [logs, setLogs] = useState<LogEntry[]>([]);
-  const [banner, setBanner] = useState<{ type: "success" | "error"; text: string } | null>(null);
-  const [showLog, setShowLog] = useState(false);
-
-  const push = (type: string, detail: string) =>
-    setLogs((l) =>
-      [{ time: new Date().toLocaleTimeString(), type, detail }, ...l].slice(0, 50),
-    );
-
   useEffect(() => {
     const instance = new Peakst8({
       baseUrl: import.meta.env.VITE_BASE_URL,
-      debug: true,
+      eventId: import.meta.env.VITE_EVENT_ID,
     });
 
-    const events = [
-      "iframe:ready",
-      "iframe:loaded",
-      "registration:success",
-      "payment:success",
-      "payment:failed",
-      "auth:success",
-      "sdk:error",
-      "embed:resize",
-    ] as const;
-
-    for (const event of events) {
-      instance.on(event, (e) => {
-        push(event, JSON.stringify(e.payload ?? {}));
-        if (event === "registration:success") {
-          setBanner({ type: "success", text: "Registration successful!" });
-        } else if (event === "payment:success") {
-          setBanner({ type: "success", text: "Payment completed! Your ticket is confirmed." });
-        } else if (event === "payment:failed") {
-          setBanner({
-            type: "error",
-            text: `Payment issue: ${(e.payload as Record<string, string>)?.reason ?? "unknown"}`,
-          });
-        }
-      });
-    }
-
-    sdk.current = instance;
-
-    if (barRef.current) {
-      instance.mount(barRef.current, {
-        path: `/event/${import.meta.env.VITE_EVENT_ID}/embed`,
-        height: "90px",
-        width: "100%",
-      });
-    }
+    // The SDK adds the fixed Register bar (and spacer) at the bottom.
+    instance.mount();
 
     return () => instance.destroy();
   }, []);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      {/* Banner */}
-      {banner && (
-        <div
-          className={`fixed top-0 inset-x-0 z-50 px-4 py-3 text-center text-sm font-medium ${
-            banner.type === "success"
-              ? "bg-emerald-600 text-white"
-              : "bg-red-600 text-white"
-          }`}
-        >
-          {banner.text}
-          <button
-            onClick={() => setBanner(null)}
-            className="ml-4 underline opacity-80 hover:opacity-100"
-          >
-            Dismiss
-          </button>
-        </div>
-      )}
-
       {/* Hero */}
       <div className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-slate-900 to-slate-950">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,119,198,0.3),transparent)]" />
@@ -107,15 +41,6 @@ export default function App() {
             {EVENT.name}
           </h1>
           <p className="mt-4 max-w-xl text-lg text-slate-400">{EVENT.description}</p>
-          <button
-            onClick={() => {
-              const bar = document.querySelector<HTMLElement>(".peakst8-bar-wrapper");
-              bar?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="mt-8 rounded-xl bg-indigo-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-500 hover:shadow-indigo-500/40 active:scale-[0.98]"
-          >
-            Register Now
-          </button>
         </div>
       </div>
 
@@ -174,41 +99,7 @@ export default function App() {
             <span className="text-lg font-medium text-slate-200">{EVENT.club}</span>
           </div>
         </section>
-
-        {/* Debug log */}
-        <section className="mt-14">
-          <button
-            onClick={() => setShowLog((v) => !v)}
-            className="text-sm font-medium text-slate-500 hover:text-slate-300"
-          >
-            {showLog ? "Hide" : "Show"} SDK event log ({logs.length})
-          </button>
-          {showLog && (
-            <pre className="mt-3 max-h-64 overflow-auto rounded-xl border border-slate-800 bg-slate-900 p-4 font-mono text-xs text-slate-400">
-              {logs.length === 0
-                ? "(no events yet)"
-                : logs.map((l, i) => (
-                    <div key={i}>
-                      <span className="text-slate-600">{l.time}</span>{" "}
-                      <span className="text-indigo-400">{l.type}</span>{" "}
-                      <span className="text-slate-500">{l.detail}</span>
-                    </div>
-                  ))}
-            </pre>
-          )}
-        </section>
       </main>
-
-      {/* Peakst8 SDK — inline CTA bar. The SDK sizes this container itself
-          (90px for the bar, 100vh once the registration drawer opens); anchored
-          to the bottom, a 100vh height covers the whole viewport. */}
-      <div
-        ref={barRef}
-        className="peakst8-bar-wrapper fixed inset-x-0 bottom-0 z-40 overflow-hidden"
-      />
-
-      {/* Spacer for fixed bottom bar */}
-      <div className="h-24" />
     </div>
   );
 }
