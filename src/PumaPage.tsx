@@ -5,7 +5,7 @@ export default function PumaPage() {
   useEffect(() => {
     const instance = new Peakst8({
       baseUrl: import.meta.env.VITE_BASE_URL,
-      eventId: "puma-project3",
+      eventId:  import.meta.env.VITE_EVENT_ID_PUMA,
     });
 
     // The SDK adds the fixed Register bar (and spacer) at the bottom.
