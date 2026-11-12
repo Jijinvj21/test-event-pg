@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Peakst8 } from "@peakst8/sdk";
 
 const EVENT = {
-  name: "Test The Full Flow",
+  name: "Team Marathon",
   date: "Mon, Nov 23 – Mon, Nov 30",
   time: "10:00 AM — 6:00 PM IST",
   location: "Bengaluru, Bengaluru",
