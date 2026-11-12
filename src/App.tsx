@@ -10,7 +10,7 @@ const EVENT = {
     "A hands-on workshop covering everything from registration to payment checkout. This is a test event created to verify the Peakst8 SDK end-to-end flow — authentication, registration, Razorpay payment, and ticket generation all running inside the embedded iframe.",
   categories: [
     { name: "General Admission", price: "FREE" },
-    { name: "VIP Experience", price: "₹ 999 + GST" },
+    { name: "VIP Experience", price: "₹ 1" },
   ],
   club: "Peakst8",
 };
