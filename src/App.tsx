@@ -3,16 +3,16 @@ import { Peakst8 } from "@peakst8/sdk";
 
 const EVENT = {
   name: "Test The Full Flow",
-  date: "Nov 15, 2026",
+  date: "Mon, Nov 23 – Mon, Nov 30",
   time: "10:00 AM — 6:00 PM IST",
-  location: "KTPO Convention Centre, Bengaluru",
+  location: "Bengaluru, Bengaluru",
   description:
-    "A hands-on workshop covering everything from registration to payment checkout. This is a test event created to verify the Peakst8 SDK end-to-end flow — authentication, registration, Razorpay payment, and ticket generation all running inside the embedded iframe.",
+    "Join the Zerodha Team Marathon for a day of fitness, teamwork, and fun! Run alongside your colleagues, cheer each other on, and celebrate every step together. Choose between a Free ticket for complimentary entry and a Standard ticket for paid entry. Lace up and meet your team at the starting line!",
   categories: [
-    { name: "General Admission", price: "FREE" },
-    { name: "VIP Experience", price: "₹ 1" },
+    { name: "Free Ticket", price: "FREE" },
+    { name: "Standard (Paid)", price: "₹ 1" },
   ],
-  club: "Peakst8",
+  club: "Team Zerodha",
 };
 
 export default function App() {
@@ -94,7 +94,7 @@ export default function App() {
           <h2 className="text-2xl font-bold">Hosted by</h2>
           <div className="mt-4 flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 text-sm font-bold text-white">
-              P8
+              TZ
             </div>
             <span className="text-lg font-medium text-slate-200">{EVENT.club}</span>
           </div>
