@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Peakst8 } from "@jijin_vj_25/sdk";
+import { Peakst8 } from "@peakst8/sdk";
 
 export default function PumaPage() {
   useEffect(() => {
